@@ -1,9 +1,8 @@
 import time
 
-import winsound
-
 from Market import Market
 from MarketComparator import MarketComparator
+from alert.SoundAlert import SoundAlert
 from connector.BithumbConnector import BithumbConnector
 from connector.BithumbConnector2 import BithumbConnector2
 from connector.KrakenConnector import KrakenConnector
@@ -20,6 +19,7 @@ class ComparatorSimulator:
         self.bithumb = BithumbConnector()
         self.bithumb_coin_market = BithumbConnector2()
         self.kraken = KrakenConnector()
+        self.alert = SoundAlert()
 
     def simulate(self):
         self.market.add_euro_on_wallet(1000)
@@ -31,11 +31,11 @@ class ComparatorSimulator:
             print("kraken", kraken_price)
             if kraken_price is not None:
                 if self.marketComparator.compare_bithumb_kraken("BCH", "EUR") > self.THRESHOLD and self.market.get_balance("EUR").amount > 0:
-                    winsound.PlaySound('sounds/sound.wav', winsound.SND_FILENAME)
+                    self.alert.alert_buy()
                     euro = Euro(kraken_price)
                     self.market.buy_all("BCH", euro)
                 elif self.marketComparator.compare_bithumb_kraken("BCH", "EUR") < - self.THRESHOLD:
-                    winsound.PlaySound('sounds/no.wav', winsound.SND_FILENAME)
+                    self.alert.alert_sell()
                     bch = BitcoinCash(kraken_price)
                     self.market.sell_all("EUR", bch)
             time.sleep(2)
