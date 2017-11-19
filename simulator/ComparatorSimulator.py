@@ -26,6 +26,7 @@ class ComparatorSimulator:
             self.market.add_euro_on_wallet(1000)
 
         while True:
+            self.market.print_balance()
             print("bithumb", self.bithumb.get_best_bids_price("BCH", "EUR"))
             kraken_price = self.kraken.get_best_bids_price("BCH", "EUR")
             print("kraken", kraken_price)
