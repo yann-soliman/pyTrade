@@ -3,9 +3,8 @@ import logging
 
 from ExchangeRateCalculator import ExchangeRateCalculator
 from Wallet import Wallet
-from model.money.BitcoinCash import BitcoinCash
 from model.money.Euro import Euro
-from model.money.Money import Money
+from simulator.MoneyDeserializer import MoneyDeserializer
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +14,7 @@ class Market:
         self.wallet = Wallet()
 
     def add_euro_on_wallet(self, amount):
+        print("[+] Ajout de ", amount, " euro dans le wallet")
         self.wallet.plus(Euro(amount))
 
     def buy(self, money_amount, money_price):
@@ -52,7 +52,8 @@ class Market:
         """
         total_money_in_wallet = self.get_balance(money_price.currency)
         if total_money_in_wallet.amount > 0:
-            money_to_buy = Market.new_money_with_currency(currency)
+            # TODO : Quelle est la bonne façon d'instancier un Money à partir de sa devise ???
+            money_to_buy = MoneyDeserializer.deserialize(currency)
             money_to_buy.amount = total_money_in_wallet.amount / money_price.amount
             self.buy(money_to_buy, money_price)
         else:
@@ -100,11 +101,3 @@ class Market:
 
     def get_balance(self, currency):
         return copy.copy(self.wallet.get_balance(currency))
-
-    @staticmethod
-    def new_money_with_currency(currency):
-        if currency == "BCH":
-            return BitcoinCash()
-        if currency == "EUR":
-            return Euro()
-            # ... todo ce truc dégeulasse ?

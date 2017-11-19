@@ -22,11 +22,11 @@ class ComparatorSimulator:
         self.alert = SoundAlert()
 
     def simulate(self):
-        self.market.add_euro_on_wallet(1000)
+        if self.market.get_balance("EUR").amount == 0:
+            self.market.add_euro_on_wallet(1000)
 
         while True:
             print("bithumb", self.bithumb.get_best_bids_price("BCH", "EUR"))
-            print("bithumb@coinmarket", self.bithumb_coin_market.get_best_bids_price("BCH", "EUR"))
             kraken_price = self.kraken.get_best_bids_price("BCH", "EUR")
             print("kraken", kraken_price)
             if kraken_price is not None:

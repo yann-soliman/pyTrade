@@ -1,7 +1,5 @@
-import re
 import urllib.request
 
-from connector.MarketConnector import MarketConnector
 from bs4 import BeautifulSoup
 
 
