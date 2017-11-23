@@ -23,6 +23,6 @@ class BithumbConnector(MarketConnector):
         return self.api.order_book(currency1)
 
     def convert_currency(self, amount, currency1, currency2):
-        # TODO : sortir dans un module séparé et appelé une API qui fait la convertion
+        # TODO : sortir dans un module séparé et appelé une API qui fait la conversion
         if currency1 == "KRW" and currency2 == "EUR":
             return amount * 0.0007791265474552958

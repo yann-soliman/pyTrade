@@ -4,13 +4,14 @@ from model.money.BitcoinCash import BitcoinCash
 from model.money.Ethereum import Ethereum
 from model.money.Euro import Euro
 from model.money.Litcoin import Litcoin
+from model.money.Dollar import Dollar
 
 
 class MoneyDeserializer:
     @staticmethod
     def deserialize(currency, amount=0):
         """
-        "Désérialize" une currency sosu forme de string en Money
+        "Désérialize" une currency sous forme de string en Money
         :param currency:
         :return:
         """
@@ -24,3 +25,5 @@ class MoneyDeserializer:
             return Ethereum(amount)
         if currency == "LTC":
             return Litcoin(amount)
+        if currency == "USD":
+            return Dollar(amount)

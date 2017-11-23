@@ -16,6 +16,11 @@ class Money(ABC):
         money.amount = amount
         return money
 
+
+    @staticmethod
+    def is_crypto_money(money):
+        return money.currency == "BTC" or money.currency == "BCH" or money.currency == "ETH" or money.currency == "LTC"
+
     def __str__(self):
         return "[" + str(self.currency) + "] : " + str(self.amount)
 

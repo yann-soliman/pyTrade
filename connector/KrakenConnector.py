@@ -5,11 +5,13 @@ import time
 from expiringdict import ExpiringDict
 
 from connector.MarketConnector import MarketConnector
+from logger.Logger import Logger
 
 
 class KrakenConnector(MarketConnector):
     def __init__(self):
-        self.cache = ExpiringDict(max_len=100, max_age_seconds=2)
+        self.cache = ExpiringDict(max_len=100, max_age_seconds=5)
+        self.logger = Logger().get_logger()
         self.k = krakenex.API()
 
     def get_best_bids_price(self, currency1, currency2):
@@ -40,18 +42,19 @@ class KrakenConnector(MarketConnector):
 
     def _query_public(self, method, data=None):
         try:
-            def func(): return self.k.query_public(method, data)
+            def func():
+                return self.k.query_public(method, data)
 
             return self._multiple_tries(func, 3)
         except Exception as e:
-            print("[-] Erreur lors de l'appel à krakik...")
+            self.logger.error("Erreur lors de l'appel à krakik...")
 
     def _multiple_tries(self, func, times):
         for _ in range(times):
             try:
                 return func()
             except HTTPException as e:
-                print("[-] got exception with HTTP code :", e.args[0])
+                self.logger.error("got exception with HTTP code : %s", e.args[0])
                 self.k.conn.close()
                 time.sleep(1)
-        raise Exception('[-] Tried to call krakik ' + str(times) + ' times without success')
+        raise Exception('Tried to call krakik %s times without success', times)

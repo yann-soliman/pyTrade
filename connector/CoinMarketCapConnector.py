@@ -12,7 +12,7 @@ class CoinMarketCapConnector():
 
     def get_average_markets_price(self, currency1, currency2, limit=10):
 
-        # Convertion de la devise demandée vers nom de la devise dans l'URL
+        # Conversion de la devise demandée vers nom de la devise dans l'URL
         request_currency = self._map_currency_to_request(currency1)
         url = self.COIN_MARKET_CAP_URL.format(request_currency)
 
@@ -43,7 +43,7 @@ class CoinMarketCapConnector():
             return "bitcoin-cash"
 
     def _get_currency_usd_exchange_rates(self, currency):
-        # Parsing de la page pour extraire les taux de convertions
+        # Parsing de la page pour extraire les taux de conversions
         soup = BeautifulSoup(self.page, "lxml")
         currency_exchange_rates = soup.find(id="currency-exchange-rates")
         return float(currency_exchange_rates['data-' + currency.lower()])

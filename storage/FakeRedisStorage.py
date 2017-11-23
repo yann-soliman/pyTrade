@@ -1,11 +1,13 @@
 import fakeredis
 
+from storage.AbstractStorage import AbstractStorage
 
-class RedisStorage:
+
+class FakeRedisStorage(AbstractStorage):
     def __init__(self):
         self.redis = fakeredis.FakeStrictRedis()
 
-    def set(self, key, value):
+    def upsert(self, key, value):
         self.redis.set(key, value)
 
     def get(self, key):

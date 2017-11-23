@@ -1,5 +1,3 @@
-from model.ExchangeRate import ExchangeRate
-
 class ExchangeRateCalculator:
 
     @staticmethod
