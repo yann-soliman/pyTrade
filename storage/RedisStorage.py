@@ -5,6 +5,7 @@ from storage.AbstractStorage import AbstractStorage
 
 class RedisStorage(AbstractStorage):
     def __init__(self, redis_url):
+        print("UTILISATION DE REDIS STORAGE !")
         self.redis = redis.from_url(redis_url)
 
     def upsert(self, key, value):
