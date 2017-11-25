@@ -12,3 +12,6 @@ class GdaxConnector(MarketConnector):
 
     def get_best_asks_price(self, currency1, currency2):
         return float(self.public_client.get_product_order_book(currency1 + "-" + currency2)['asks'][0][0])
+
+    def get_ticker(self, currency1, currency2):
+        return self.public_client.get_product_ticker(currency1 + "-" + currency2)
