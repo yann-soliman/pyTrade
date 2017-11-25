@@ -1,17 +1,10 @@
 import time
 
-from config.Config import Config
+from alert.SoundAlert import SoundAlert
 from connector.GdaxConnector import GdaxConnector
 from logger.Logger import Logger
-from alert.SoundAlert import SoundAlert
-from connector.BithumbConnector import BithumbConnector
-from connector.BithumbConnector2 import BithumbConnector2
-from connector.CryptoCompareConnector import CryptoCompareConnector
-from connector.KrakenConnector import KrakenConnector
 from market.Market import Market
-from model.money.BitcoinCash import BitcoinCash
 from model.money.Euro import Euro
-from simulator.MarketComparator import MarketComparator
 from utils.MoneyDeserializer import MoneyDeserializer
 
 
@@ -35,7 +28,7 @@ class GdaxCompulsifSimulator:
         self.logger = Logger().get_logger()
         self.gdax = GdaxConnector()
         # Montant du dernier achat
-        self.last_buying_price = 10000
+        self.last_buying_price = 1000
         self.currency = currency
 
         # Variables pour la simulation du market
@@ -55,7 +48,7 @@ class GdaxCompulsifSimulator:
             print(ticker)
             if ticker is not None:
                 ask_price = float(ticker['ask'])
-                if self.should_buy(ask_price):
+                if self.should_buy(ask_price) and self.market.get_balance("EUR").amount > 0.1:
                     self.alert.alert_buy()
                     money_amount = MoneyDeserializer.deserialize(self.currency, self.STEP_DIFFERENCE / ask_price)
                     money_price = Euro(ask_price)
@@ -73,7 +66,7 @@ class GdaxCompulsifSimulator:
         :param ask_price:
         :return:
         """
-        return ask_price < self.last_buying_price - self.BUYING_STEP
+        return ask_price > self.last_buying_price - self.BUYING_STEP
 
     def place_selling_order(self, buying_price):
         selling_price = (buying_price + self.MARGIN) / 100
