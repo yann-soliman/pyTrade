@@ -28,7 +28,7 @@ class GdaxCompulsifSimulator:
         self.logger = Logger().get_logger()
         self.gdax = GdaxConnector()
         # Montant du dernier achat
-        self.last_buying_price = 1000
+        self.last_buying_price = 0
         self.currency = currency
 
         # Variables pour la simulation du market
@@ -66,7 +66,7 @@ class GdaxCompulsifSimulator:
         :param ask_price:
         :return:
         """
-        return ask_price > self.last_buying_price - self.BUYING_STEP
+        return ask_price > self.last_buying_price - self.BUYING_STEP or self.last_buying_price == 0
 
     def place_selling_order(self, buying_price):
         selling_price = (buying_price + self.MARGIN) / 100

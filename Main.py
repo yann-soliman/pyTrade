@@ -1,9 +1,7 @@
 import logging
-
 import os
 
 from config.Config import Config
-from simulator.ComparatorSimulator import ComparatorSimulator
 from simulator.GdaxCompulsifSimulator import GdaxCompulsifSimulator
 
 logging.basicConfig(format="%(levelname) -10s %(asctime)s | %(module)s:%(lineno)s | %(funcName)s | %(message)s",
