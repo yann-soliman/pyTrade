@@ -53,7 +53,7 @@ class GdaxCompulsifSimulator:
                     money_amount = MoneyDeserializer.deserialize(self.currency, self.STEP_DIFFERENCE / ask_price)
                     money_price = Euro(ask_price)
                     self.market.buy(money_amount, money_price)
-                    self.last_buying_price = self.STEP_DIFFERENCE / ask_price
+                    self.last_buying_price = ask_price
                     self.market.print_balance()
                     self.market.print_balance()
 
@@ -66,7 +66,7 @@ class GdaxCompulsifSimulator:
         :param ask_price:
         :return:
         """
-        return ask_price > self.last_buying_price - self.BUYING_STEP or self.last_buying_price == 0
+        return ask_price < self.last_buying_price - self.BUYING_STEP or self.last_buying_price == 0
 
     def place_selling_order(self, buying_price):
         selling_price = (buying_price + self.MARGIN) / 100

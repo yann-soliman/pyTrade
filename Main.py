@@ -10,7 +10,7 @@ logging.basicConfig(format="%(levelname) -10s %(asctime)s | %(module)s:%(lineno)
 #TODO : voir pour utiliser ça : https://github.com/nlsdfnbch/bitex
 def main():
     # simulator = ComparatorSimulator()
-    currency = os.environ.get('CURRENCY', "BTC")
+    currency = os.environ.get('CURRENCY', "ETH")
     simulator = GdaxCompulsifSimulator(currency)
     simulator.simulate()
 
