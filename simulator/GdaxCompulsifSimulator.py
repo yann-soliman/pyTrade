@@ -16,11 +16,11 @@ class GdaxCompulsifSimulator:
     """
 
     # Marge en pourcentage à laquelle revendre le coin qui a été acheté
-    MARGIN = 1
+    MARGIN = 0.5
     # Montant en € acheté à chaque palier
     STEP_DIFFERENCE = 100
     # Palier en € pour lequel acheter
-    BUYING_STEP = 1
+    BUYING_STEP = 0.5
 
     def __init__(self, currency):
         self.market = Market()
@@ -42,13 +42,14 @@ class GdaxCompulsifSimulator:
             self.market.add_euro_on_wallet(1000)
 
         self.market.print_balance()
+        last_ticker = None
 
         while True:
             ticker = self.gdax.get_ticker(self.currency, "EUR")
             print(ticker)
             if ticker is not None:
                 ask_price = float(ticker['ask'])
-                if self.should_buy(ask_price) and self.market.get_balance("EUR").amount > 0.1:
+                if self.should_buy(ticker, last_ticker) and self.market.get_balance("EUR").amount > 0.1:
                     self.alert.alert_buy()
                     money_amount = MoneyDeserializer.deserialize(self.currency, self.STEP_DIFFERENCE / ask_price)
                     money_price = Euro(ask_price)
@@ -56,17 +57,35 @@ class GdaxCompulsifSimulator:
                     self.last_buying_price = ask_price
                     self.market.print_balance()
                     self.market.print_balance()
+                    last_ticker = ticker
 
                 self.do_market(ticker["trade_id"], float(ticker["price"]))
             time.sleep(5)
 
-    def should_buy(self, ask_price):
+    def should_buy(self, ticker, last_ticker):
         """
         Défini ce qui conditionne l'achat, toute l'intelligence est là
         :param ask_price:
         :return:
         """
-        return ask_price < self.last_buying_price - self.BUYING_STEP or self.last_buying_price == 0
+
+        # si on n'a pas encore acheté
+        if self.last_buying_price == 0:
+            return True
+
+        if last_ticker is not None:
+
+            ask_price = float(ticker["ask"])
+            ticker_price = float(last_ticker["price"])
+
+            # Si c'est en train de descendre
+            if ticker_price - ask_price:
+                # Si le prix est en dessous du dernier prix d'achat - le palier
+                # ou que le prix est remonté
+                return ask_price < self.last_buying_price - self.BUYING_STEP \
+                       or ask_price > self.last_buying_price \
+
+        return False
 
     def place_selling_order(self, buying_price):
         selling_price = (buying_price + self.MARGIN) / 100
