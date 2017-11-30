@@ -1,10 +1,12 @@
 import urllib.request
 
+import requests
 from bs4 import BeautifulSoup
 
 
 class CoinMarketCapConnector():
     COIN_MARKET_CAP_URL = "https://coinmarketcap.com/currencies/{}"
+    COIN_MARKET_CAP_API_URL = "https://api.coinmarketcap.com/v1"
 
     def __init__(self):
         # Page en cours de parsing
@@ -37,6 +39,11 @@ class CoinMarketCapConnector():
         # Réinitialise la page à none
         self.page = None
         return price_by_market
+
+    def get_market_cap(self):
+        r = requests.get(self.COIN_MARKET_CAP_API_URL + "/global/")
+        if r.status_code is 200:
+            return float(r.json()["total_market_cap_usd"])
 
     def _map_currency_to_request(self, currency):
         if currency == "BCH":

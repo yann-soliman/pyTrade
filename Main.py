@@ -1,6 +1,7 @@
 import logging
 
 from alert.EmailAlert import EmailAlert
+from bot.MarketCapBot import MarketCapBot
 from config.Config import Config
 
 logging.basicConfig(format="%(levelname) -10s %(asctime)s | %(module)s:%(lineno)s | %(funcName)s | %(message)s",
@@ -13,8 +14,9 @@ def main():
     # simulator = GdaxCompulsifSimulator(currency)
     # simulator.simulate()
 
-    emailAlert = EmailAlert()
-    emailAlert.send_simple_message()
+
+    bot = MarketCapBot()
+    bot.run()
 
 
 if __name__ == "__main__":
