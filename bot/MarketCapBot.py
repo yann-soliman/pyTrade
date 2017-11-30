@@ -19,7 +19,9 @@ class MarketCapBot:
         while True:
             cap = self.coinmarket_cap_connector.get_market_cap()
             if previous_cap is not None and abs((previous_cap - cap) / previous_cap * 100) >= self.THRESHOLD:
-                self.alert.send_message("ALERTE, coinmarket cap avant : " + str(previous_cap) + " et maintenant : " + str(cap))
+                message = "ALERTE, coinmarket cap avant : " + str(previous_cap) + " et maintenant : " + str(cap)
+                self.alert.send_message(self.me, message)
+                self.alert.send_message(self.mf, message)
                 print("ALERTE, coinmarket cap avant : " + str(previous_cap) + " et maintenant : " + str(cap))
             previous_cap = cap
             sleep(10)
