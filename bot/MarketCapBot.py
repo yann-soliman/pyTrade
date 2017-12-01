@@ -5,7 +5,7 @@ from connector.CoinMarketCapConnector import CoinMarketCapConnector
 
 
 class MarketCapBot:
-    THRESHOLD = 0.3
+    THRESHOLD = 1
 
     def __init__(self):
         self.alert = EmailAlert()
