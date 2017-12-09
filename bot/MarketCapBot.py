@@ -13,6 +13,7 @@ class MarketCapBot:
         self.me = "yann.soliman@gmail.com"
         self.mf = "tom_lyo@hotmail.fr"
         self.matt = "langlois.matt@gmail.com"
+        self.killbox = "benjimor44@gmail.com"
 
     def run(self):
         previous_cap = 99999999999
@@ -24,6 +25,7 @@ class MarketCapBot:
                 self.alert.send_message(self.me, message)
                 self.alert.send_message(self.mf, message)
                 self.alert.send_message(self.matt, message)
+                self.alert.send_message(self.killbox, message)
                 print("ALERTE, coinmarket cap avant : " + str(previous_cap) + " et maintenant : " + str(cap))
             previous_cap = cap
             sleep(10)
